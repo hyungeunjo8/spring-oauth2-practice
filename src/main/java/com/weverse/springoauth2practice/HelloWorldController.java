@@ -1,12 +1,13 @@
-package com.example.springoauth2practice;
+package com.weverse.springoauth2practice;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class HelloController {
+public class HelloWorldController {
 
     @GetMapping("/")
-    void hello() {
+    String hello() {
+        return "hello";
     }
 }

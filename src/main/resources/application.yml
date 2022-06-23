@@ -1,0 +1,17 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${google.client.id}
+            client-secret: ${client.secret}
+            scope:
+              - profile
+              - email
+              - openid
+  config:
+    import: aws-secretsmanager:/secret/hgjo/example
+aws:
+  secretsmanager:
+    region: ap-northeast-2
