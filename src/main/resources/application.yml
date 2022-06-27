@@ -12,6 +12,9 @@ spring:
               - openid
   config:
     import: aws-secretsmanager:/secret/hgjo/example
+jwt:
+  secret:
+    key: ${jwt.secret.key}
 aws:
   secretsmanager:
     region: ap-northeast-2

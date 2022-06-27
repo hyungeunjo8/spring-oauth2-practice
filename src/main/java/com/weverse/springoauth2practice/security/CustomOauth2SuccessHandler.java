@@ -13,7 +13,6 @@ public class CustomOauth2SuccessHandler implements AuthenticationSuccessHandler 
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        Object credentials = authentication.getCredentials();
         response.sendRedirect("/");
     }
 }
