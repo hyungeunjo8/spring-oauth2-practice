@@ -11,7 +11,7 @@ public enum UserAuthority implements GrantedAuthority {
         public static final String MANAGER = "ROLE_MANAGER";
     }
 
-    private UserAuthority(String userRole) {
+    UserAuthority(String userRole) {
         this.userRole = userRole;
     }
 

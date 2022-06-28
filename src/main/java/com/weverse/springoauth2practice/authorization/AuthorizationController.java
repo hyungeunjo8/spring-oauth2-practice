@@ -26,4 +26,8 @@ public class AuthorizationController {
         return "Success Manager Role Check";
     }
 
+    @GetMapping("/authorization/multi-by-configure")
+    String checkMultiAuthorizationByConfigure() {
+        return "Success Configure Authorization";
+    }
 }

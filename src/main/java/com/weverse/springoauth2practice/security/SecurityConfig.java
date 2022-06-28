@@ -25,13 +25,16 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
         httpSecurity.sessionManagement()
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        httpSecurity.authorizeRequests()
+                .mvcMatchers("/authorization/multi-by-configure")
+                .hasAnyAuthority(UserAuthority.ROLES.USER, UserAuthority.ROLES.MANAGER);
 
         httpSecurity.authorizeRequests()
                 .mvcMatchers("/refresh-token").permitAll()
                 .anyRequest()
                 .authenticated();
-
 
         httpSecurity.oauth2Login()
                 .loginPage("/token/expired")
