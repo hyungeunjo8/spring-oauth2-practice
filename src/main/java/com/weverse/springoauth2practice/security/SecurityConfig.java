@@ -37,7 +37,6 @@ public class SecurityConfig {
                 .authenticated();
 
         httpSecurity.oauth2Login()
-                .loginPage("/token/expired")
                 .userInfoEndpoint()
                 .userService(customOauth2UserService)
                 .and()
