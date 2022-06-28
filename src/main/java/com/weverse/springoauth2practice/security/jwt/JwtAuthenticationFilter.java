@@ -27,7 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Authentication authentication = new Jwt(jwtConfiguration.getJwtSecretKey()).getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
-            System.out.println("invalid jwt token");
+            System.out.println("jwt empty or invalid jwt");
         }
         filterChain.doFilter(request, response);
     }

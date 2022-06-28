@@ -24,12 +24,14 @@ public class CustomOauth2SuccessHandler implements AuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+
+        // set custom user role
         String email = oAuth2User.getAttribute("email");
-        Token token = new Jwt(jwtConfiguration.getJwtSecretKey()).create(email, getRole());
+        TokenDto tokenDto = new Jwt(jwtConfiguration.getJwtSecretKey()).create(email, getRole());
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(token.toJson());
+        response.getWriter().write(tokenDto.toJson());
     }
 
     private UserAuthority getRole() {

@@ -1,7 +1,7 @@
 package com.weverse.springoauth2practice.security.jwt;
 
 import com.weverse.springoauth2practice.security.CustomAuthenticationToken;
-import com.weverse.springoauth2practice.security.Token;
+import com.weverse.springoauth2practice.security.TokenDto;
 import com.weverse.springoauth2practice.security.UserAuthority;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -13,22 +13,18 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Date;
 import java.util.List;
 
-public class Jwt {
-    private final String secretKey;
-
+public record Jwt(String secretKey) {
     private static final long TOKEN_VALID_TIME = 1000L * 60L * 10L;
     private static final long REFRESH_TOKEN_VALID_TIME = 1000L * 60L * 60L * 24L * 30L;
 
-    public Jwt(String secretKey) {
-        this.secretKey = secretKey;
-    }
+    private static final String ROLE = "role";
 
-    public Token create(String uid, UserAuthority userAuthority) {
+    public TokenDto create(String uid, UserAuthority userAuthority) {
         Claims claims = Jwts.claims().setSubject(uid);
-        claims.put("role", userAuthority.getAuthority());
+        claims.put(ROLE, userAuthority.getAuthority());
 
         Date now = new Date();
-        return new Token(
+        return new TokenDto(
                 Jwts.builder()
                         .setClaims(claims)
                         .setIssuedAt(now)
@@ -43,19 +39,21 @@ public class Jwt {
                         .compact());
     }
 
-    public Authentication getAuthentication(String token) throws JwtInvalidException {
-        if (token == null) {
-            throw new JwtInvalidException();
-        }
-        Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token.substring("Bearer ".length()));
+    public Authentication getAuthentication(String token) throws InvalidTokenException {
+        String jwt = new BearerType(token).jwt();
+        Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey)
+                .parseClaimsJws(jwt);
         verify(claimsJws);
-        return new CustomAuthenticationToken(claimsJws.getBody().getSubject(), List.of(new SimpleGrantedAuthority(claimsJws.getBody().get("role", String.class))));
+        return new CustomAuthenticationToken(
+                claimsJws.getBody().getSubject(),
+                List.of(new SimpleGrantedAuthority(claimsJws.getBody().get("role", String.class)))
+        );
     }
 
-    private void verify(Jws<Claims> claimsJws) throws JwtInvalidException {
+    private void verify(Jws<Claims> claimsJws) throws InvalidTokenException {
         boolean valid = claimsJws.getBody().getExpiration().after(new Date());
         if (!valid) {
-            throw new JwtInvalidException();
+            throw new InvalidTokenException();
         }
     }
 }

@@ -8,8 +8,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @SpringBootApplication
 public class SpringOauth2PracticeApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SpringOauth2PracticeApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SpringOauth2PracticeApplication.class, args);
+    }
 
 }
