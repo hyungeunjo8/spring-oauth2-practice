@@ -32,7 +32,10 @@ public class SecurityConfig {
                 .hasAnyAuthority(UserAuthority.ROLES.USER, UserAuthority.ROLES.MANAGER);
 
         httpSecurity.authorizeRequests()
-                .mvcMatchers("/refresh-token").permitAll()
+                .mvcMatchers("/refresh-token")
+                .permitAll();
+
+        httpSecurity.authorizeRequests()
                 .anyRequest()
                 .authenticated();
 
